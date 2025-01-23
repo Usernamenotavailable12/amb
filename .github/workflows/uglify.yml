@@ -53,7 +53,7 @@ jobs:
           ls -l dist || echo "dist folder is missing"
           cat dist/main.min.js || echo "main.min.js is missing"
 
-      # Step 8: Push the minified file to a branche
+      # Step 8: Push the minified file to a branch
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
