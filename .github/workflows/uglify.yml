@@ -36,24 +36,25 @@ jobs:
       - name: Fix Permissions for terser
         run: chmod +x ./node_modules/.bin/terser
 
-      # Step 6: Minify Each JS File and Combine
-      - name: Minify and Combine JS Files
+      # Step 6: Concatenate All JS Files
+      - name: Concatenate JavaScript Files
         run: |
           mkdir -p dist
-          touch dist/main.min.js
-          for file in src/*.js; do
-            npx terser "$file" --compress --mangle >> dist/main.min.js
-            echo "" >> dist/main.min.js  # Ensure newline between files
-          done
+          cat src/*.js > dist/combined.js
 
-      # Step 7: Verify dist folder
+      # Step 7: Minify the Combined JS File
+      - name: Minify Combined JS File
+        run: |
+          npx terser dist/combined.js -o dist/main.min.js --compress --mangle
+
+      # Step 8: Verify dist folder
       - name: Verify dist folder
         run: |
           echo "Contents of dist folder:"
           ls -l dist || echo "dist folder is missing"
           cat dist/main.min.js || echo "main.min.js is missing"
 
-      # Step 8: Push the minified file to a branch
+      # Step 9: Push the minified file to a branch
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,5 +64,5 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git checkout -B uglified-branch
           git add dist/main.min.js
-          git commit -m "Automated minification and combination of JS files"
+          git commit -m "Automated concatenation and minification of JS files"
           git push -u origin uglified-branch --force
