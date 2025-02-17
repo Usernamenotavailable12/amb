@@ -65,7 +65,7 @@ function generateRecentWinsCSS(wins) {
   ${selectorList} {
     position: absolute;
     color: #ffffff;
-    font-size: 17px;
+    font-size: 13px;
     text-shadow: rgb(0, 0, 0, 0.2) 0px 2px 6px, rgb(0, 0, 0, 0.2) 0px -2px 6px,
       rgb(0, 0, 0, 0.2) 2px 0px 6px, rgb(0, 0, 0, 0.2) -2px 0px 6px;
     box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.8),
