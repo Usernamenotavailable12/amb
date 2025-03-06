@@ -85,6 +85,7 @@ async function fetchWheelData() {
   }
 
   displayFortuneWheels();
+  return fortuneWheels;
 }
 
 function displayFortuneWheels() {
