@@ -34,8 +34,7 @@ async function fetchHighCash() {
                                       bottom: 10px;
                                       right: 10px;
                                       font-size: var(--font-size-body);
-                                      background: var(--background-background) var(--highcash) no-repeat 5px
-                                        center;
+                                      background: var(--background-background) url("https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/f7d50df4-859a-4cb8-bc88-ea83e01e1174/HighCash.svg") no-repeat 5px center;
                                       padding: 5px 5px 5px 25px;
                                       border-radius: 7px;
                                       z-index: 2;
