@@ -25,7 +25,7 @@ async function fetchProgressiveJackpot() {
               bottom: 10px;
               right: 10px;
               font-size: var(--font-size-body);
-              background: rgb(7 20 104 / 92%) var(--progressive) no-repeat 5px center;
+              background: rgb(7 20 104 / 92%) url("https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/54d869aa-cdfa-4227-a3e7-f52b48a5dc96/Progressive.svg") no-repeat 5px center;
               padding: 5px 5px 5px 25px;
               border-radius: 7px;
               z-index: 2;
