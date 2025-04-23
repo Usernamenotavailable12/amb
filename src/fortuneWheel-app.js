@@ -5,8 +5,8 @@ let selectedFortuneWheel = null;
 
 async function fetchWheelData() {
   const query = `
-    query GetUserBoxes($userId: ID, $brandId: ID!) {
-      userBoxConnection(userId: $userId, brandId: $brandId, status: ACTIVE) {
+    query GetUserBoxes($userId: ID) {
+      userBoxConnection(userId: $userId, status: ACTIVE) {
         edges {
           node {
             box {
@@ -50,7 +50,6 @@ async function fetchWheelData() {
   const authData = extractAuthDataFromCookie();
   const result = await fetchGraphQL(query, {
     userId: authData.userId,
-    brandId: BRAND_ID,
   });
 
   // Filter out any boxes that have already been spun
