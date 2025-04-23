@@ -7,8 +7,8 @@ async function fetchActiveUserBoxes() {
   }
 
   const query = `
-    query UserBoxConnection($userId: ID, $brandId: ID!) {
-      userBoxConnection(userId: $userId, brandId: $brandId, status: ACTIVE) {
+    query UserBoxConnection($userId: ID) {
+      userBoxConnection(userId: $userId, status: ACTIVE) {
         edges {
           node {
             userBoxId
@@ -25,7 +25,6 @@ async function fetchActiveUserBoxes() {
   `;
   const data = await fetchGraphQL(query, {
     userId: authData.userId,
-    brandId: BRAND_ID,
   });
   return data.data.userBoxConnection.edges
     .map((edge) => edge.node)
