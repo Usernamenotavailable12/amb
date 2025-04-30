@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
   if (!getCookie("cookieConsent")) {
     requestAnimationFrame(createCookieConsentBanner);
   }
@@ -10,7 +10,7 @@ function createCookieConsentBanner() {
   container.innerHTML = `
     <div class="cookieConsent">
       <div class="cookieConsentContainer">
-        <p>საიტი იყენებს Cookie ფაილებს. დახურვის ღილაკზე დაჭერით თქვენ ეთანხმებით Cookie ფაილების გამოყენების წესებს და პირობებს. <a href="https://www.ambassadoribet.com/cookie-policy" target="_blank">Cookie პოლიტიკა.</a></p>
+        <p>საიტი იყენებს Cookie ფაილებს. დახურვის ღილაკზე დაჭერით თქვენ ეთანხმებით Cookie ფაილების გამოყენების წესებს და პირობებს. <a style="color: #cf167d" href="https://www.ambassadoribet.com/cookie-policy" target="_blank">Cookie პოლიტიკა.</a></p>
         <button class="acceptCookies">დახურვა</button>
       </div>
     </div>
