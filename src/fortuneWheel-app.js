@@ -1,6 +1,5 @@
-// Global arrays to hold active wheels and track spun boxes
 let fortuneWheels = [];
-let spunBoxes = []; // Track boxes that have already been spun
+let spunBoxes = [];
 let selectedFortuneWheel = null;
 
 async function fetchWheelData() {
@@ -35,6 +34,9 @@ async function fetchWheelData() {
                       contentId
                     }
                   }
+                  ... on GiveLoyaltyPointsAction {
+                    amount
+                  }
                 }
                 probability
               }
@@ -52,7 +54,6 @@ async function fetchWheelData() {
     userId: authData.userId,
   });
 
-  // Filter out any boxes that have already been spun
   fortuneWheels = result.data.userBoxConnection.edges
     .map((edge) => edge.node)
     .filter(
@@ -130,25 +131,26 @@ function renderFortuneWheel(rewards) {
     const segment = document.createElement("div");
     segment.className = "segment";
 
-    // Calculate rotation values
     const baseRotation = -(360 / totalSegments) * index;
     const randomRotation = baseRotation + 160;
     const randomRotationTwo = baseRotation + 52;
 
-    // Set CSS variables for rotations
     segment.style.setProperty("--rot-var", `rotate(${baseRotation}deg)`);
     segment.style.setProperty("--rot-var-random", `rotate(${randomRotation}deg)`);
     segment.style.setProperty("--rot-var-random-two", `rotate(${randomRotationTwo}deg)`);
 
-    // Determine which background image to use (bonus or box)
-    const backgroundImageVar = reward.action[0].bonus?.contentId
-      ? `var(--${reward.action[0].bonus.contentId})`
-      : `var(--${reward.action[0].box.contentId})`;
+    // Determine which background image to use (bonus, box, or loyalty points)
+    let backgroundImageVar;
+    if (reward.action[0].bonus?.contentId) {
+      backgroundImageVar = `var(--${reward.action[0].bonus.contentId})`;
+    } else if (reward.action[0].box?.contentId) {
+      backgroundImageVar = `var(--${reward.action[0].box.contentId})`;
+    } else if (reward.action[0].amount) {
+      backgroundImageVar = `var(--loyalty-points-${reward.action[0].amount})`;
+    }
 
-    // Apply the chosen background image
     segment.style.setProperty('--background-image-var', backgroundImageVar);
 
-    // Styling and content
     segment.style.transform = `rotate(${(360 / totalSegments) * index}deg)`;
     segment.dataset.index = index;
     segment.innerHTML = `<span class="wheel-reward-holder"><br></span>`;
@@ -156,7 +158,6 @@ function renderFortuneWheel(rewards) {
     const rewardHolder = segment.querySelector('.wheel-reward-holder');
 
     if (rewardHolder) {
-      // Apply the correct background image dynamically
       rewardHolder.style.setProperty('background-image', `${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0))`);
     } else {
       console.warn("wheel-reward-holder not found inside segment.");
@@ -182,6 +183,9 @@ async function openFortuneBox(userBoxId) {
               ... on GiveBoxAction {
                 boxId
               }
+              ... on GiveLoyaltyPointsAction {
+                amount
+              }
             }
           }
         }
@@ -201,12 +205,10 @@ async function openFortuneBox(userBoxId) {
     throw new Error("Failed to open user box or invalid response structure.");
   }
 
-  // Extract actions from the response
   const rewardActions = response.data.openUserBox.userBox.reward.action;
 
-  // Return an array of IDs (could be a bonusId or boxId)
   const actionIds = rewardActions.map((action) => {
-    return action.bonusId || action.boxId;
+    return action.bonusId || action.boxId || action.amount;
   });
 
   return actionIds;
@@ -224,17 +226,13 @@ async function startWheelSpin() {
   const wheelElement = document.getElementById("wheel");
 
   try {
-    // Play spin start sound
     playSound("spinStartSound");
 
-    // GET THE ARRAY OF AWARDED IDs (BONUS OR BOX)
     const awardedActionIds = await openFortuneBox(selectedFortuneWheel.userBoxId);
 
-    // FIND WHICH SEGMENT WON (matching bonusId or boxId)
     const winningRewardIndex = selectedFortuneWheel.box.rewards.findIndex((reward) => {
       const action = reward.action[0];
-      // If it's a bonus, action.bonusId is valid; if it's a box, action.boxId is valid
-      const possibleId = action.bonusId || action.boxId;
+      const possibleId = action.bonusId || action.boxId || action.amount;
       return awardedActionIds.includes(possibleId);
     });
 
@@ -245,69 +243,55 @@ async function startWheelSpin() {
     }
 
     const totalSegments = selectedFortuneWheel.box.rewards.length;
-    // Basic spin math
     const finalRotation = 360 * 5 - (360 / totalSegments) * winningRewardIndex;
 
-    // Reset the wheel animation before starting a new spin
     wheelElement.style.transition = "none";
     wheelElement.style.transform = "rotate(0deg)";
-    void wheelElement.offsetWidth; // force reflow
+    void wheelElement.offsetWidth;
 
-    // Random overshoot
     function getRandomOvershoot() {
       return Math.floor(Math.random() * (200 - (-200) + 1)) - 200;
     }
     const overshoot = getRandomOvershoot();
     const incorrectRotation = finalRotation + overshoot;
 
-    // Spin times
-    const spinTime = 4; // main spin duration in seconds
+    const spinTime = 4;
     const minCorrectionTime = 0.8;
     const maxCorrectionTime = 4;
     const correctionTime =
       minCorrectionTime + (Math.abs(overshoot) / 200) * (maxCorrectionTime - minCorrectionTime);
 
-    // 1) Spin to an "incorrect" position
     wheelElement.style.transition = `transform ${spinTime}s cubic-bezier(0.42, 0, 0.58, 1)`;
     wheelElement.style.transform = `rotate(${incorrectRotation}deg)`;
 
-    // 2) Then correct to the final position
     setTimeout(() => {
       wheelElement.style.transition = `transform ${correctionTime}s ease-out`;
       wheelElement.style.transform = `rotate(${finalRotation}deg)`;
     }, spinTime * 1000);
 
-    // After total animation time, highlight the winning segment and update local state
     const totalAnimationTime = (spinTime + correctionTime) * 1000;
     setTimeout(() => {
-      // Add a highlight to the winning segment
       const winningSegment = wheelElement.querySelectorAll(".segment")[winningRewardIndex];
       if (winningSegment) {
         winningSegment.classList.add("winning-segment");
       }
 
-      // Remove the button for this wheel (so you can't spin again)
       const wheelButton = document.getElementById(`wheel-btn-${selectedFortuneWheel.index}`);
       if (wheelButton) {
         wheelButton.remove();
       }
 
-      // Mark this box as spun locally so it doesn’t show up on the next fetch
       spunBoxes.push(selectedFortuneWheel.userBoxId);
-      // Remove the spun box from the available list
       fortuneWheels = fortuneWheels.filter(box => box.userBoxId !== selectedFortuneWheel.userBoxId);
 
-      // Play spin result sound
       playSound("spinResultSound");
 
-      // Optionally, disable the "Check Active" button for a short period
       const fetchDataButton = document.getElementById("fetchDataButton");
       fetchDataButton.disabled = true;
       setTimeout(() => {
         fetchDataButton.disabled = false;
-      }, 3000); // 3-second forced delay
+      }, 3000);
 
-      // Clear the current selection and keep the spin button disabled
       selectedFortuneWheel = null;
       document.getElementById("spinWheelButton").disabled = true;
     }, totalAnimationTime);
@@ -319,7 +303,6 @@ async function startWheelSpin() {
   addTemporarySpinningClass();
 }
 
-// Helper function to play a sound by element ID
 function playSound(soundId) {
   const sound = document.getElementById(soundId);
   if (sound) {
@@ -335,7 +318,7 @@ function addTemporarySpinningClass() {
       wheelElement.classList.add("spining");
       setTimeout(() => {
         wheelElement.classList.remove("spining");
-      }, 3000); 
-    }, 500); 
+      }, 3000);
+    }, 500);
   }
 }
