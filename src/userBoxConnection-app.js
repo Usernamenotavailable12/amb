@@ -1,4 +1,5 @@
 let rewardTimeout;
+let openedBoxIds = []; 
 
 async function fetchActiveUserBoxes() {
   const authData = extractAuthDataFromCookie();
@@ -29,7 +30,8 @@ async function fetchActiveUserBoxes() {
   return data.data.userBoxConnection.edges
     .map((edge) => edge.node)
     .filter((box) => box.status === "ACTIVE")
-    .filter((box) => ["LOOT_BOX", "MYSTERY_BOX"].includes(box.box.type));
+    .filter((box) => ["LOOT_BOX", "MYSTERY_BOX"].includes(box.box.type))
+    .filter((box) => !openedBoxIds.includes(box.userBoxId)); 
 }
 
 async function openBox(userBoxId) {
@@ -138,6 +140,7 @@ async function handleOpenBox(userBoxId, button) {
   button.disabled = true;
   button.innerText = "......";
   const rewards = await openBox(userBoxId);
+  openedBoxIds.push(userBoxId); 
   displayRewards(rewards);
   button.closest(".box").remove();
 }
