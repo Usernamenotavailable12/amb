@@ -52,23 +52,22 @@ function generateCSS(gameIds) {
     // Remove last comma and close the CSS rule
     cssContent = cssContent.trim().replace(/,$/, "") + ` {\n`;
     cssContent += `    &:after {
-    content: 'NEW';
-    position: absolute;
-    color: white;
-    font-size: 130%;
-    font-weight: bold;
-    background: linear-gradient(45deg,#3d0202 0%,#870808 10%,#3d0202 40%,#870808 40%,#3d0202 70%,#870808 0%);
-    top: 0;
-    right: 0;
-    border-bottom-left-radius: 10px 10px;
-    padding: 5px;
-    z-index: 100000;
-    border-bottom: solid 4px #1f051c;
-    border-left: solid 4px #1f051c;
-    font-family: 'Noto Serif Georgian' !important;
-    pointer-events: none !important;
-    animation: colorChangeBadge 2s infinite alternate !important;
-    background-size: 200% 200%;
+          content: 'New';
+          position: absolute;
+          color: white;
+          font-size: 130%;
+          font-weight: bold;
+          background: #1AAF92;
+          top: 7px;
+          right: 0;
+          transform: translatex(6px);
+          border-radius: 5px;
+          padding: 2px 5px;
+          z-index: 100000;
+          font-family: 'Noto Sans Ambassadori' !important;
+          pointer-events: none !important;
+          animation: colorChangeBadge 2s infinite alternate !important;
+          background-size: 200% 200%;
   }\n  }\n}`;
 
     // Append CSS to the document
