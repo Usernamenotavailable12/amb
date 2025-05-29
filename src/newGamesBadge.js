@@ -66,7 +66,6 @@ function generateCSS(gameIds) {
           z-index: 100000;
           font-family: 'Noto Sans Ambassadori' !important;
           pointer-events: none !important;
-          animation: colorChangeBadge 2s infinite alternate !important;
           background-size: 200% 200%;
   }\n  }\n}`;
 
