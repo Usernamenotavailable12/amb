@@ -95,8 +95,8 @@ async function openBox(userBoxId) {
     } else if (action.amount) {
       return {
         type: "LOYALTY_POINTS",
-        name: "Loyalty Points",
-        description: `You received ${action.amount} loyalty points!`,
+        name: "Bat Coin",
+        description: `${action.amount} <span class="loyalty-points">Bat Coin</span>`,
         amount: action.amount,
       };
     }
@@ -163,8 +163,8 @@ function displayRewards(rewards) {
     rewardElement.className = "reward-item";
     if (reward.type === "LOYALTY_POINTS") {
       rewardElement.innerHTML = `
-        <p class="reward-title">${reward.name}</p>
-        <strong>${reward.description}</strong>
+        <p class="reward-title">${reward.description}</p>
+        <div style="background: var(--${reward.name})" class="reward-image-id"></div>
       `;
     } else {
       rewardElement.innerHTML = `
