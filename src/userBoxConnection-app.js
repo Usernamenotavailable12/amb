@@ -68,6 +68,9 @@ async function openBox(userBoxId) {
                   contentId
                 }
               }
+              ... on GiveLoyaltyPointsAction {
+                amount
+              }
             }
           }
         }
@@ -88,6 +91,13 @@ async function openBox(userBoxId) {
         type: "BOX",
         name: action.box.name,
         description: action.box.description,
+      };
+    } else if (action.amount) {
+      return {
+        type: "LOYALTY_POINTS",
+        name: "Loyalty Points",
+        description: `You received ${action.amount} loyalty points!`,
+        amount: action.amount,
       };
     }
   });
@@ -151,10 +161,18 @@ function displayRewards(rewards) {
   for (const reward of rewards) {
     const rewardElement = document.createElement("div");
     rewardElement.className = "reward-item";
-    rewardElement.innerHTML = `
-      <p class="reward-title"></p><strong>${reward.description}</strong>
-      <div style="background: var(--${reward.contentId})" class="reward-image-id"></div>
-    `;
+    if (reward.type === "LOYALTY_POINTS") {
+      rewardElement.innerHTML = `
+        <p class="reward-title">${reward.name}</p>
+        <strong>${reward.description}</strong>
+      `;
+    } else {
+      rewardElement.innerHTML = `
+        <p class="reward-title">${reward.name}</p>
+        <strong>${reward.description}</strong>
+        <div style="background: var(--${reward.contentId})" class="reward-image-id"></div>
+      `;
+    }
     rewardsContainer.appendChild(rewardElement);
   }
   rewardTimeout = setTimeout(clearRewards, 7000);
