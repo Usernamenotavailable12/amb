@@ -164,7 +164,7 @@ function displayRewards(rewards) {
     if (reward.type === "LOYALTY_POINTS") {
       rewardElement.innerHTML = `
         <p class="reward-title">${reward.description}</p>
-        <div style="background: var(--${reward.name})" class="reward-image-id"></div>
+        <div style="background: var(--${reward.name.replace(/\s/g, '-').toLowerCase()})" class="reward-image-id"></div>
       `;
     } else {
       rewardElement.innerHTML = `
