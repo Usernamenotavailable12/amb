@@ -150,6 +150,11 @@ function renderFortuneWheel(rewards) {
       backgroundImageVar = `var(--${reward.action[0].currencyCode}-${reward.action[0].amount})`;
     }
 
+    let currencyAmountVar;
+     if (reward.action[0].amount) {
+      backgroundImageVar = `${reward.action[0].amount}`;
+    }
+
     segment.style.setProperty('--background-image-var', backgroundImageVar);
 
     segment.style.transform = `rotate(${(360 / totalSegments) * index}deg)`;
@@ -160,6 +165,7 @@ function renderFortuneWheel(rewards) {
 
     if (rewardHolder) {
       rewardHolder.style.setProperty('background-image', `${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0))`);
+      rewardHolder.style.setProperty('--currencyAmountVar', `${currencyAmountVar}`);
     } else {
       console.warn("wheel-reward-holder not found inside segment.");
     }
