@@ -36,6 +36,7 @@ async function fetchWheelData() {
                   }
                   ... on GiveLoyaltyPointsAction {
                     amount
+                    currencyCode
                   }
                 }
                 probability
@@ -146,7 +147,7 @@ function renderFortuneWheel(rewards) {
     } else if (reward.action[0].box?.contentId) {
       backgroundImageVar = `var(--${reward.action[0].box.contentId})`;
     } else if (reward.action[0].amount) {
-      backgroundImageVar = `var(--loyalty-points-${reward.action[0].amount})`;
+      backgroundImageVar = `var(--${reward.action[0].currencyCode}-${reward.action[0].amount})`;
     }
 
     segment.style.setProperty('--background-image-var', backgroundImageVar);
