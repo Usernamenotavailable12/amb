@@ -140,35 +140,31 @@ function renderFortuneWheel(rewards) {
     segment.style.setProperty("--rot-var-random", `rotate(${randomRotation}deg)`);
     segment.style.setProperty("--rot-var-random-two", `rotate(${randomRotationTwo}deg)`);
 
-    // Determine which background image to use (bonus, box, or loyalty points)
-    let backgroundImageVar;
-    if (reward.action[0].bonus?.contentId) {
-      backgroundImageVar = `var(--${reward.action[0].bonus.contentId})`;
-    } else if (reward.action[0].box?.contentId) {
-      backgroundImageVar = `var(--${reward.action[0].box.contentId})`;
-    } else if (reward.action[0].amount) {
-      backgroundImageVar = `var(--${reward.action[0].currencyCode}-${reward.action[0].amount})`;
-    }
+ // Determine which background image to use (bonus, box, or loyalty points)
+  let backgroundImageVar;
+  if (reward.action[0].bonus?.contentId) {
+    backgroundImageVar = `var(--${reward.action[0].bonus.contentId})`;
+  } else if (reward.action[0].box?.contentId) {
+    backgroundImageVar = `var(--${reward.action[0].box.contentId})`;
+  } else if (reward.action[0].amount) {
+    backgroundImageVar = `var(--${reward.action[0].currencyCode}-${reward.action[0].amount})`;
+  }
 
-    let currencyAmountVar;
-     if (reward.action[0].amount) {
-      backgroundImageVar = `${reward.action[0].amount}`;
-    }
+  let currencyAmountVar;
+  if (reward.action[0].amount) {
+    currencyAmountVar = `${reward.action[0].amount}`;
+  }
 
-    segment.style.setProperty('--background-image-var', backgroundImageVar);
+  segment.style.setProperty('--background-image-var', backgroundImageVar);
+  segment.style.transform = `rotate(${(360 / totalSegments) * index}deg)`;
+  segment.dataset.index = index;
+  segment.innerHTML = `<span class="wheel-reward-holder" style="background-image: ${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0)); --currencyAmountVar: ${currencyAmountVar};"></span>`;
 
-    segment.style.transform = `rotate(${(360 / totalSegments) * index}deg)`;
-    segment.dataset.index = index;
-    segment.innerHTML = `<span class="wheel-reward-holder"><br></span>`;
+  const rewardHolder = segment.querySelector('.wheel-reward-holder');
 
-    const rewardHolder = segment.querySelector('.wheel-reward-holder');
-
-    if (rewardHolder) {
-      rewardHolder.style.setProperty('background-image', `${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0))`);
-      rewardHolder.style.setProperty('--currencyAmountVar', `${currencyAmountVar}`);
-    } else {
-      console.warn("wheel-reward-holder not found inside segment.");
-    }
+  if (!rewardHolder) {
+    console.warn("wheel-reward-holder not found inside segment.");
+  }
 
     wheelElement.appendChild(segment);
   });
