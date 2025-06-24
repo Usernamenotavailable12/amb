@@ -158,7 +158,7 @@ function renderFortuneWheel(rewards) {
   segment.style.setProperty('--background-image-var', backgroundImageVar);
   segment.style.transform = `rotate(${(360 / totalSegments) * index}deg)`;
   segment.dataset.index = index;
-  segment.innerHTML = `<span class="wheel-reward-holder" style="background-image: ${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0)); --currencyAmountVar: ${currencyAmountVar};"></span>`;
+  segment.innerHTML = `<span class="wheel-reward-holder, ${reward?.action[0]?.currencyCode  || null}" style="background-image: ${backgroundImageVar}, radial-gradient(rgba(255, 255, 255, .2), rgba(0, 0, 0, 0)); --currencyAmountVar: ${currencyAmountVar || null};"></span>`;
 
   const rewardHolder = segment.querySelector('.wheel-reward-holder');
 
