@@ -5,7 +5,7 @@ let selectedFortuneWheel = null;
 async function fetchWheelData() {
   const query = `
     query GetUserBoxes($userId: ID) {
-      userBoxConnection(userId: $userId, status: ACTIVE, first: 30) {
+      userBoxConnection(userId: $userId, status: ACTIVE, first: 70) {
         edges {
           node {
             box {
