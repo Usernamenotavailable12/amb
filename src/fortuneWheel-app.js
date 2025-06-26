@@ -82,6 +82,7 @@ async function fetchWheelData() {
     setTimeout(() => {
       document.body.removeChild(messageElement);
     }, 3000);
+    displayFortuneWheels()
     return;
   }
 
