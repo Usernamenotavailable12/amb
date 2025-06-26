@@ -91,7 +91,7 @@ async function fetchWheelData() {
 
 function displayFortuneWheels() {
   const fortuneListTop = document.getElementById("fortuneListTop");
-  fortuneListTop.innerHTML = `<span class="choose-wheel-text"></span>`;
+  fortuneListTop.innerHTML = `<span style='--totalcount: "${fortuneWheels.length}"' class="choose-wheel-text"></span>`;
   const fortuneList = document.getElementById("fortuneList");
   fortuneList.innerHTML = "";
 
@@ -273,7 +273,7 @@ async function startWheelSpin() {
     }, spinTime * 1000);
 
     const totalAnimationTime = (spinTime + correctionTime) * 1000;
-    setTimeout(() => {
+    setTimeout(async () => {
       const winningSegment = wheelElement.querySelectorAll(".segment")[winningRewardIndex];
       if (winningSegment) {
         winningSegment.classList.add("winning-segment");
@@ -297,6 +297,7 @@ async function startWheelSpin() {
 
       selectedFortuneWheel = null;
       document.getElementById("spinWheelButton").disabled = true;
+      await fetchWheelData();
     }, totalAnimationTime);
   } catch (error) {
     alert("Error opening the box. Please try again.");
