@@ -21,7 +21,7 @@ async function fetchGraphQL(query, variables = {}) {
 function extractAuthDataFromCookie() {
   const auth = getCookie("auth");
   if (!auth) {
-    console.error("Auth cookie not found.");
+    console.warn("Auth cookie not found.");
     return null;
   }
   try {
