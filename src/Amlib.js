@@ -10,6 +10,7 @@ async function fetchGraphQL(query, variables = {}) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "tm-bid": "ab",
       Authorization: `Bearer ${authData.accessToken}`,
     },
     body: JSON.stringify({ query, variables }),
