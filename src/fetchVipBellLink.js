@@ -99,4 +99,4 @@ async function fetchVipBellLink() {
 // Call the function immediately and every 3.5 seconds
 setTimeout(() => {
   fetchVipBellLink();
-}, 4600);
+}, 5600);
