@@ -58,7 +58,7 @@ async function fetchVipBellLink() {
                                       bottom: 10px;
                                       right: 10px;
                                       font-size: var(--font-size-body);
-                                      background: rgb(70 7 104 / 92%) url("https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/8228a998-a96c-4939-bedc-51cad1b895d5/vip-bell-link.svg") no-repeat 5px center;
+                                      background: rgb(70 7 104 / 92%) url("https://www.ambassadoribet.com/_internal/ts-images/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/8228a998-a96c-4939-bedc-51cad1b895d5/vip-bell-link.svg") no-repeat 5px center;
                                       padding: 5px 5px 5px 25px;
                                       border-radius: 7px;
                                       z-index: 2;
