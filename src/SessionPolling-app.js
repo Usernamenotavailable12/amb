@@ -20,6 +20,7 @@ async function fetchSessionInfo(userId, accessToken) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "tm-bid": "ab",
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
