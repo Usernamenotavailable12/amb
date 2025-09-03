@@ -38,6 +38,35 @@ function extractAuthDataFromCookie() {
   }
 }
 
+function getUserSegmentse() {
+  const cookieKeys = ["guestUserSegments", "guestUserSegments.v2"];
+  let segments = null;
+
+  for (const key of cookieKeys) {
+    const cookieValue = getCookie(key);
+    if (cookieValue) {
+      try {
+        const decodedSegments = decodeURIComponent(cookieValue);
+        segments = JSON.parse(decodedSegments);
+        if (Array.isArray(segments)) {
+          return segments;
+        } else {
+          console.warn(`Cookie ${key} does not contain a valid array.`);
+          return null;
+        }
+      } catch (error) {
+        console.error(`Error parsing ${key} cookie:`, error);
+        continue; 
+      }
+    }
+  }
+
+  if (!segments) {
+    console.warn("Guest user segments cookie not found.");
+  }
+  return null;
+}
+
 function getCookie(name) {
   const cookies = document.cookie.split(";");
   const cookie = cookies.find((row) => row.trim().startsWith(name + "="));
@@ -48,3 +77,4 @@ function formatDate(isoString) {
   const date = new Date(isoString);
   return date.toLocaleString();
 }
+
