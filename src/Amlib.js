@@ -38,7 +38,7 @@ function extractAuthDataFromCookie() {
   }
 }
 
-function getUserSegmentse() {
+function getUserSegments() {
   const cookieKeys = ["guestUserSegments", "guestUserSegments.v2"];
   let segments = null;
 
@@ -77,4 +77,5 @@ function formatDate(isoString) {
   const date = new Date(isoString);
   return date.toLocaleString();
 }
+
 
